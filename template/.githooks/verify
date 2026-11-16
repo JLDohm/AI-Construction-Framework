@@ -1,0 +1,56 @@
+#!/usr/bin/env bash
+# Verify the current branch from a clean copy, before merging.
+# 1. Warns about changes that aren't committed (they won't be merged).
+# 2. Checks out the last commit into a temporary folder and runs every check there,
+#    plus the long-run checks, so a pass can't depend on files that exist only on this machine.
+# 3. Audits dependencies for known vulnerabilities (.githooks/audit.d/).
+# Run: .githooks/verify
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+repo=$PWD
+# Verify never lets failing checks through, even if this was set for a failing-checks commit.
+unset CONST_FAILING_CHECKS
+# shellcheck source=.githooks/lib.sh
+source .githooks/lib.sh
+
+echo "== 1. Uncommitted changes"
+dirty=$(git status --porcelain)
+if [[ -n "$dirty" ]]; then
+  echo "• These changes are not committed, so they are not part of what gets verified or merged:"
+  while IFS= read -r line; do echo "    $line"; done <<<"$dirty"
+else
+  echo "• none"
+fi
+
+echo "== 2. All checks on a clean copy of $(git rev-parse --short HEAD)"
+tmp=$(mktemp -d)
+cleanup() {
+  git -C "$repo" worktree remove --force "$tmp/clean" >/dev/null 2>&1
+  rm -rf "$tmp"
+}
+trap cleanup EXIT
+if ! git worktree add --detach --quiet "$tmp/clean" HEAD; then
+  echo "✗ could not create a clean copy" >&2
+  exit 1
+fi
+
+(
+  cd "$tmp/clean" || exit 1
+  # Run the long-run checks too.
+  export CONST_LONG=1
+  # Where the real repository is, for checks that need its local tools (model/.venv).
+  export CONST_REPO="$repo"
+  .githooks/pre-commit
+)
+clean_rc=$?
+if [[ $clean_rc -ne 0 ]]; then failed=1; fi
+
+echo "== 3. Dependency audit"
+source_all .githooks/audit.d
+
+echo
+if [[ $failed -ne 0 ]]; then
+  echo "✗ Verify failed. Fix the problems above before merging." >&2
+  exit 1
+fi
+echo "✓ Verified: the committed branch passes every check from a clean copy, and no known vulnerable dependencies were found."

@@ -1,0 +1,3 @@
+# Line endings: LF in the repository and on checkout, on every OS, so tests and hooks see the same bytes.
+* text=auto eol=lf
+# Files that must stay byte-for-byte as received (e.g. reference copies) can opt out: "path/**" -text

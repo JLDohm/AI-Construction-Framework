@@ -1,0 +1,12 @@
+# IRC 2021, R403: footings. The frost depth itself is a jurisdiction value: it goes in
+# jurisdiction/jurisdiction.toml (rule frost-depth), not here.
+
+[[rule]]
+id = "footing-depth-min"
+code = "IRC 2021"
+section = "R403.1.4"
+title = "Bottom of footing below undisturbed ground surface, minimum"
+value = 12
+units = "in"
+source = "IRC 2021 R403.1.4"
+verified = false

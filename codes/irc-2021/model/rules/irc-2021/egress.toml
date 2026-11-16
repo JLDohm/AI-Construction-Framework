@@ -1,0 +1,61 @@
+# IRC 2021, R310: emergency escape and rescue openings.
+
+[[rule]]
+id = "egress-area-min"
+code = "IRC 2021"
+section = "R310.2.1"
+title = "Emergency escape opening, net clear opening area, minimum"
+value = 5.7
+units = "sq ft"
+source = "IRC 2021 R310.2.1"
+verified = false
+
+[[rule]]
+id = "egress-area-min-grade-floor"
+code = "IRC 2021"
+section = "R310.2.1 Exception"
+title = "Emergency escape opening at grade floor or below grade, net clear opening area, minimum"
+value = 5.0
+units = "sq ft"
+source = "IRC 2021 R310.2.1, exception for grade-floor and below-grade openings"
+verified = false
+
+[[rule]]
+id = "egress-height-min"
+code = "IRC 2021"
+section = "R310.2.1"
+title = "Emergency escape opening, net clear height, minimum"
+value = 24
+units = "in"
+source = "IRC 2021 R310.2.1"
+verified = false
+
+[[rule]]
+id = "egress-width-min"
+code = "IRC 2021"
+section = "R310.2.1"
+title = "Emergency escape opening, net clear width, minimum"
+value = 20
+units = "in"
+source = "IRC 2021 R310.2.1"
+verified = false
+
+[[rule]]
+id = "egress-sill-max"
+code = "IRC 2021"
+section = "R310.2.2"
+title = "Emergency escape window sill height above the floor, maximum"
+value = 44
+units = "in"
+source = "IRC 2021 R310.2.2"
+verified = false
+
+[[rule]]
+id = "grade-floor-sill-max"
+code = "IRC 2021"
+section = "R202 (grade floor emergency escape and rescue opening)"
+title = "Sill height above or below finished grade for an opening to count as a grade-floor opening, maximum"
+value = 44
+units = "in"
+source = "IRC 2021 R202, definition"
+verified = false

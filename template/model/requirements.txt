@@ -1,0 +1,9 @@
+# Building-model tools. Install: python3 -m venv .venv && .venv/bin/pip install -r requirements.lock
+# After changing this file: .venv/bin/pip install -r requirements.txt && .venv/bin/pip freeze > requirements.lock
+# Each library is a decision (docs/decisions.md).
+ezdxf        # DXF drawings, and PDF through its matplotlib backend
+matplotlib   # draws the PDFs
+pytest
+ruff
+mypy
+pip-audit

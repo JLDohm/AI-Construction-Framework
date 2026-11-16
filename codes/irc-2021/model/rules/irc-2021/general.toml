@@ -1,0 +1,11 @@
+# IRC 2021: general requirements.
+
+[[rule]]
+id = "continuous-load-path"
+code = "IRC 2021"
+section = "R301.1"
+title = "A complete load path from every supported element to the foundation is required (1 = required)"
+value = 1
+units = "required"
+source = "IRC 2021 R301.1"
+verified = false

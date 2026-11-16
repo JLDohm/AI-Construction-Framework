@@ -1,0 +1,34 @@
+# IRC 2021, Chapter 3: room sizes and ceiling heights.
+# Numbers and section IDs only, never code text. verified = true only after the owner has
+# checked the value against their own copy of the 2021 IRC (python -m bldg rules --todo).
+
+[[rule]]
+id = "habitable-area-min"
+code = "IRC 2021"
+section = "R304.1"
+title = "Habitable room floor area, minimum"
+value = 70
+units = "sq ft"
+source = "IRC 2021 R304.1"
+verified = false
+
+[[rule]]
+id = "habitable-dimension-min"
+code = "IRC 2021"
+section = "R304.2"
+title = "Habitable room horizontal dimension, minimum (kitchens exempt)"
+value = 84
+units = "in"
+source = "IRC 2021 R304.2 (7 ft)"
+verified = false
+
+[[rule]]
+id = "ceiling-height-min"
+code = "IRC 2021"
+section = "R305.1"
+title = "Ceiling height of habitable space, hallways, bathrooms, toilet rooms and laundry rooms, minimum"
+value = 84
+units = "in"
+source = "IRC 2021 R305.1 (7 ft)"
+verified = false
+note = "R305.1's exceptions (sloped ceilings, beams and ducts, bathroom fixtures) and R305.1.1 basements are not modeled: the code-reviewer checks them by hand."

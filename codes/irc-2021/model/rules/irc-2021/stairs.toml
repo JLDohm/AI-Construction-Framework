@@ -1,0 +1,91 @@
+# IRC 2021, R311.7: stairways.
+
+[[rule]]
+id = "stair-width-min"
+code = "IRC 2021"
+section = "R311.7.1"
+title = "Stairway clear width above handrail height, minimum"
+value = 36
+units = "in"
+source = "IRC 2021 R311.7.1"
+verified = false
+
+[[rule]]
+id = "stair-headroom-min"
+code = "IRC 2021"
+section = "R311.7.2"
+title = "Stairway headroom, minimum"
+value = 80
+units = "in"
+source = "IRC 2021 R311.7.2 (6 ft 8 in)"
+verified = false
+
+[[rule]]
+id = "riser-max"
+code = "IRC 2021"
+section = "R311.7.5.1"
+title = "Stair riser height, maximum"
+value = 7.75
+units = "in"
+source = "IRC 2021 R311.7.5.1"
+verified = false
+
+[[rule]]
+id = "riser-variation-max"
+code = "IRC 2021"
+section = "R311.7.5.1"
+title = "Greatest minus smallest riser height in a flight, maximum"
+value = 0.375
+units = "in"
+source = "IRC 2021 R311.7.5.1"
+verified = false
+
+[[rule]]
+id = "tread-min"
+code = "IRC 2021"
+section = "R311.7.5.2"
+title = "Stair tread depth, minimum"
+value = 10
+units = "in"
+source = "IRC 2021 R311.7.5.2"
+verified = false
+
+[[rule]]
+id = "tread-variation-max"
+code = "IRC 2021"
+section = "R311.7.5.2"
+title = "Greatest minus smallest tread depth in a flight, maximum"
+value = 0.375
+units = "in"
+source = "IRC 2021 R311.7.5.2"
+verified = false
+
+[[rule]]
+id = "handrail-risers-min"
+code = "IRC 2021"
+section = "R311.7.8"
+title = "Number of risers in a flight at which a handrail is required"
+value = 4
+units = "risers"
+source = "IRC 2021 R311.7.8"
+verified = false
+
+[[rule]]
+id = "handrail-height-min"
+code = "IRC 2021"
+section = "R311.7.8.1"
+title = "Handrail height above the nosing line, minimum"
+value = 34
+units = "in"
+source = "IRC 2021 R311.7.8.1"
+verified = false
+
+[[rule]]
+id = "handrail-height-max"
+code = "IRC 2021"
+section = "R311.7.8.1"
+title = "Handrail height above the nosing line, maximum"
+value = 38
+units = "in"
+source = "IRC 2021 R311.7.8.1"
+verified = false

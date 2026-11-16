@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+# const-framework checks. Runs on every commit; run it by hand any time.
+# Each part of the project adds its checks as a file in .githooks/checks.d/.
+# To fix formatting problems it reports, run .githooks/format.
+# Bypass the main-branch block for a one-off with: ALLOW_MAIN=1 git commit ...
+# The failing-checks commit (and only that one): CONST_FAILING_CHECKS=1 git commit ...
+# lets the new compliance checks and tests fail; formatting and lint still run, and verify ignores it.
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+# shellcheck source=.githooks/lib.sh
+source .githooks/lib.sh
+
+branch=$(git branch --show-current)
+# (Finishing a merge on main after fixing conflicts is allowed: MERGE_HEAD exists then.)
+if [[ -n "${GIT_INDEX_FILE:-}" && ("$branch" == "main" || "$branch" == "master") && "${ALLOW_MAIN:-}" != "1" ]] &&
+  ! git rev-parse -q --verify MERGE_HEAD >/dev/null; then
+  echo "✗ Don't commit directly to main. Make a branch: git switch -c phase-N-<name>" >&2
+  exit 1
+fi
+
+# Phase dependencies: on a phase-N branch, every phase that N depends on must be finished.
+# The "Depends on" column of docs/build-plan.md lists them; every phase also depends on phase 0.
+# Finished means "ready to merge" or "done" for a brief or design phase, and only "done" for a
+# permit or build phase: a released permit set is not an issued permit, and work isn't finished
+# until its inspections pass.
+# To go ahead anyway (owner's decision, recorded in docs/decisions.md): ALLOW_PHASE_ORDER=1 git commit ...
+if [[ "$branch" =~ ^phase-([0-9]+)- && -f docs/build-plan.md && "${ALLOW_PHASE_ORDER:-}" != "1" ]]; then
+  blocked=$(awk -F'|' -v n="${BASH_REMATCH[1]}" '
+    function trim(s) { gsub(/^ +| +$/, "", s); return s }
+    # The header row names the columns, so their order can change.
+    trim($2) == "Phase" && !ph {
+      for (i = 2; i < NF; i++) {
+        h = trim($i)
+        if (h == "Phase") ph = i; else if (h == "Type") ty = i
+        else if (h == "Depends on") dep = i; else if (h == "Status") st = i
+      }
+      next
+    }
+    # Only the first table is the plan; later tables (examples, follow-ups) are not.
+    ph && !/^ *\|/ { exit }
+    ph && trim($ph) ~ /^[0-9]+$/ {
+      p = trim($ph) + 0
+      status[p] = trim($st); type[p] = trim($ty); deps[p] = $dep
+    }
+    END {
+      if (!ph || !st || !ty || !dep) { print "docs/build-plan.md has no table with Phase, Type, Depends on and Status columns"; exit }
+      n += 0
+      if (!(n in status)) { printf "phase %d is not in docs/build-plan.md; add it first", n; exit }
+      d = deps[n]; gsub(/[^0-9]+/, " ", d)
+      if (n != 0) d = "0 " d
+      k = split(d, list, " ")
+      for (i = 1; i <= k; i++) {
+        q = list[i] + 0
+        if (q == n || seen[q]++) continue
+        if (!(q in status)) { printf "phase %d (not in the build plan); ", q; continue }
+        s = status[q]
+        if (s == "done") continue
+        if (s == "ready to merge" && (type[q] == "brief" || type[q] == "design")) continue
+        printf "phase %d (%s %s); ", q, type[q], s
+      }
+    }' docs/build-plan.md)
+  if [[ -n "$blocked" ]]; then
+    echo "✗ Phase ${BASH_REMATCH[1]} can't start yet: ${blocked%; }." >&2
+    echo "  A permit or build phase must be done; a brief or design phase ready to merge or done. See docs/build-plan.md." >&2
+    exit 1
+  fi
+fi
+
+if [[ "${CONST_FAILING_CHECKS:-}" == "1" ]]; then
+  echo "• CONST_FAILING_CHECKS=1: check failures won't block this commit. Use it only for checks(phase-N): failing checks."
+fi
+
+source_all .githooks/checks.d
+
+if [[ $failed -ne 0 ]]; then
+  echo "✗ Checks failed. Fix the problems above (formatting: run .githooks/format), then commit again." >&2
+  exit 1
+fi
+echo "✓ All checks passed."

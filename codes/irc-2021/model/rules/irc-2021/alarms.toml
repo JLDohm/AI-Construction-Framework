@@ -1,0 +1,75 @@
+# IRC 2021, R314 and R315: smoke and carbon monoxide alarms.
+# Counts are minimums (1 = one alarm required there). verified = true only after the owner has
+# checked the value against the 2021 IRC.
+
+[[rule]]
+id = "smoke-alarm-in-sleeping-room"
+code = "IRC 2021"
+section = "R314.3"
+title = "Smoke alarms in each sleeping room, minimum"
+value = 1
+units = "alarms"
+source = "IRC 2021 R314.3 item 1"
+verified = false
+
+[[rule]]
+id = "smoke-alarm-outside-sleeping-rooms"
+code = "IRC 2021"
+section = "R314.3"
+title = "Smoke alarms outside each separate sleeping area, in the immediate vicinity of the bedrooms, minimum"
+value = 1
+units = "alarms"
+source = "IRC 2021 R314.3 item 2"
+verified = false
+
+[[rule]]
+id = "smoke-alarm-each-story"
+code = "IRC 2021"
+section = "R314.3"
+title = "Smoke alarms on each story, including basements and habitable attics, minimum"
+value = 1
+units = "alarms"
+source = "IRC 2021 R314.3 item 3"
+verified = false
+
+[[rule]]
+id = "smoke-alarm-from-bath-door-min"
+code = "IRC 2021"
+section = "R314.3"
+title = "Smoke alarm horizontal distance from the door or opening of a bathroom with a tub or shower, minimum"
+value = 36
+units = "in"
+source = "IRC 2021 R314.3 item 4"
+verified = false
+
+[[rule]]
+id = "co-alarm-outside-sleeping-rooms"
+code = "IRC 2021"
+section = "R315.3"
+title = "Carbon monoxide alarms outside each separate sleeping area, in the immediate vicinity of the bedrooms (where required by R315.1 or R315.2), minimum"
+value = 1
+units = "alarms"
+source = "IRC 2021 R315.3"
+verified = false
+
+[[rule]]
+id = "smoke-alarm-interconnected"
+code = "IRC 2021"
+section = "R314.4"
+title = "Smoke alarms interconnected so that one sounding sounds all (1 = required)"
+value = 1
+units = "required"
+source = "IRC 2021 R314.4"
+verified = false
+note = "The exceptions for existing buildings (alterations, repairs, additions without access to the wiring) are checked by hand."
+
+[[rule]]
+id = "smoke-alarm-hardwired"
+code = "IRC 2021"
+section = "R314.6"
+title = "Smoke alarms powered from the building wiring, with battery backup (1 = required)"
+value = 1
+units = "required"
+source = "IRC 2021 R314.6"
+verified = false
+note = "The exceptions for existing buildings (alterations, repairs, additions without access to the wiring) are checked by hand."

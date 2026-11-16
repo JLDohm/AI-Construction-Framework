@@ -1,0 +1,22 @@
+# Python (the building model)
+__pycache__/
+.venv
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Generated drawings and takeoffs: rebuilt from the model by `python -m bldg build`.
+# Released sets (permit, issued for construction) are committed under model/releases/.
+/model/out/
+
+# Large field photos: keep the originals elsewhere; commit only what an inspection record needs.
+/field/raw/
+
+# Editors / OS
+.vscode/
+.idea/
+*:Zone.Identifier
+.DS_Store
+
+# Claude Code local settings
+.claude/settings.local.json

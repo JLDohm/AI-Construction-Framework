@@ -1,0 +1,66 @@
+# {{PROJECT}}: the jurisdiction. Filled in during phase 0 from official sources only: the building
+# department's website and code list, the state's code adoption, and the design-criteria table the
+# department uses. Every value cites its source and the date it was checked.
+# A value of 0 (or "") means "not filled in yet": never guess it. Ask the building department.
+
+[jurisdiction]
+name = ""                  # e.g. "City of Springfield, <State>"
+building_department = ""   # office, address
+contact = ""               # phone, email
+permit_portal = ""         # where permits are applied for and inspections booked
+checked = ""               # YYYY-MM-DD, when these sources were last checked
+
+[codes]
+# The editions the department enforces for one- and two-family dwellings, and their sources.
+residential = ""           # e.g. "2021 International Residential Code, with state amendments"
+residential_source = ""
+electrical = ""
+plumbing = ""
+mechanical = ""
+energy = ""
+notes = ""
+
+[design]
+# Values that aren't numbers. Numbers are [[rule]] entries below, so checks can use them.
+climate_zone = ""          # IECC climate zone, e.g. "5A"
+climate_zone_source = ""
+seismic_design_category = ""
+seismic_source = ""
+weathering = ""            # Table R301.2(1) columns, as the department fills them in
+termite = ""
+decay = ""
+winter_design_temperature = ""
+flood_hazard = ""          # the property's flood zone, from the FEMA map or the department
+design_criteria_source = ""
+
+# Numeric design values, in the rule format (see model/rules/README.md). The checks read these.
+
+[[rule]]
+id = "frost-depth"
+code = "Jurisdiction"
+section = "Table R301.2(1), frost line depth"
+title = "Frost line depth: bottom of footings below finished grade, minimum"
+value = 0
+units = "in"
+source = ""
+verified = false
+
+[[rule]]
+id = "ground-snow-load"
+code = "Jurisdiction"
+section = "Table R301.2(1), ground snow load"
+title = "Ground snow load"
+value = 0
+units = "psf"
+source = ""
+verified = false
+
+[[rule]]
+id = "ultimate-wind-speed"
+code = "Jurisdiction"
+section = "Table R301.2(1), wind design speed"
+title = "Ultimate design wind speed"
+value = 0
+units = "mph"
+source = ""
+verified = false

@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Format all code in the project (the building model and its checks).
+# Run it before committing: .githooks/format
+# Each part of the project adds its formatter as a file in .githooks/format.d/.
+set -uo pipefail
+cd "$(git rev-parse --show-toplevel)" || exit 1
+# shellcheck source=.githooks/lib.sh
+source .githooks/lib.sh
+
+source_all .githooks/format.d
+
+if [[ $failed -ne 0 ]]; then
+  echo "✗ Some formatters could not run. See above." >&2
+  exit 1
+fi
+echo "✓ Formatted. Review the changes with: git diff"

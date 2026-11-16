@@ -1,0 +1,10 @@
+# Latest-code checks set aside. The project designs to the enforced code AND the latest code
+# (packs.conf: code and prefer). Where meeting the latest code would break the enforced code, or
+# the owner decides otherwise, add a waiver here naming the decision in docs/decisions.md:
+#
+#   [[waiver]]
+#   check = "T-2.4"
+#   decision = "D-9"
+#   reason = "the code in force requires X; the latest code requires Y; they conflict, so the code in force wins"
+#
+# A waiver for a check that passes is reported as a problem: remove it.

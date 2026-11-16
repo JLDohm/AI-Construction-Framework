@@ -1,0 +1,31 @@
+# IRC 2021, R312.1: guards.
+
+[[rule]]
+id = "guard-drop-threshold"
+code = "IRC 2021"
+section = "R312.1.1"
+title = "Height of an open-sided walking surface above the floor or grade below (within 36 in horizontally) above which a guard is required"
+value = 30
+units = "in"
+source = "IRC 2021 R312.1.1"
+verified = false
+
+[[rule]]
+id = "guard-height-min"
+code = "IRC 2021"
+section = "R312.1.2"
+title = "Guard height above the walking surface, minimum (not on the open side of a stair)"
+value = 36
+units = "in"
+source = "IRC 2021 R312.1.2"
+verified = false
+
+[[rule]]
+id = "guard-opening-max"
+code = "IRC 2021"
+section = "R312.1.3"
+title = "Guard openings: largest sphere that may pass through (not on the open side of a stair)"
+value = 4
+units = "in"
+source = "IRC 2021 R312.1.3"
+verified = false

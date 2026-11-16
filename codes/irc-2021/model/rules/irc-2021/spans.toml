@@ -1,0 +1,31 @@
+# IRC 2021 span tables. These start EMPTY on purpose: a span copied wrongly is easy to miss,
+# so the owner adds only the rows this project uses, typed from their own copy of the code,
+# and marks the rule verified. A check that needs a missing row fails and says which row.
+#
+# Row format: one inline table per row. species_grade is written exactly as the model's
+# Member.species_grade; spacing and spans are in inches (e.g. 11 ft 10 in = 142).
+#   table = [
+#     { species_grade = "Southern pine #2", size = "2x8", spacing = 16, span = 142 },
+#   ]
+
+[[rule]]
+id = "deck-joist-span"
+code = "IRC 2021"
+section = "Table R507.6"
+title = "Deck joist allowable span (and cantilever), by species, size and spacing"
+table = []
+units = "in"
+source = "IRC 2021 Table R507.6: add rows as { species_grade, size, spacing, span }"
+verified = false
+note = "Read the table's footnotes for the loads and species groups it assumes; anything outside them is beyond the prescriptive rules. Cantilevers are not checked yet: the structural-reviewer checks them by hand."
+
+[[rule]]
+id = "floor-joist-span-living"
+code = "IRC 2021"
+section = "Table R502.3.1(2)"
+title = "Floor joist span, residential living areas (40 psf live, 10 psf dead, L/360)"
+table = []
+units = "in"
+source = "IRC 2021 Table R502.3.1(2): add rows as { species_grade, size, spacing, span }"
+verified = false
+note = "Use Table R502.3.1(1) instead for sleeping areas and attics at 30 psf; add it as its own rule if needed."

@@ -1,0 +1,26 @@
+# The building model. Its own environment: model/.venv (see the model-practice guide).
+#   cd model && python3 -m venv .venv && .venv/bin/pip install -r requirements.lock
+[project]
+name = "bldg-model"
+version = "0"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = ["longrun: slow checks; run by .githooks/verify"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["out", "releases"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "I", "UP", "S", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]   # assert is fine in tests
+"bldg/__main__.py" = ["S603", "S607"]   # runs git, with fixed arguments
+
+[tool.mypy]
+strict = true
+files = ["bldg", "bldg_checks", "checks", "project.py", "tests"]

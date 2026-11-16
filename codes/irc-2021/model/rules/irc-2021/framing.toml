@@ -1,0 +1,52 @@
+# IRC 2021, R502.8.1: notches and bored holes in sawn-lumber joists, rafters, blocking and beams.
+# Engineered lumber (I-joists, LVL, trusses) follows its manufacturer's rules instead.
+
+[[rule]]
+id = "bore-diameter-max-fraction"
+code = "IRC 2021"
+section = "R502.8.1"
+title = "Bored hole diameter, maximum, as a fraction of member depth"
+value = 0.3333333333
+units = "x depth"
+source = "IRC 2021 R502.8.1 (one-third of the depth)"
+verified = false
+
+[[rule]]
+id = "bore-edge-distance-min"
+code = "IRC 2021"
+section = "R502.8.1"
+title = "Bored hole edge to the top or bottom of the member, minimum"
+value = 2
+units = "in"
+source = "IRC 2021 R502.8.1"
+verified = false
+
+[[rule]]
+id = "notch-depth-max-fraction"
+code = "IRC 2021"
+section = "R502.8.1"
+title = "Notch depth away from the ends, maximum, as a fraction of member depth"
+value = 0.1666666667
+units = "x depth"
+source = "IRC 2021 R502.8.1 (one-sixth of the depth)"
+verified = false
+
+[[rule]]
+id = "end-notch-depth-max-fraction"
+code = "IRC 2021"
+section = "R502.8.1"
+title = "Notch depth at the member's ends, maximum, as a fraction of member depth"
+value = 0.25
+units = "x depth"
+source = "IRC 2021 R502.8.1 (one-fourth of the depth)"
+verified = false
+
+[[rule]]
+id = "notch-length-max-fraction"
+code = "IRC 2021"
+section = "R502.8.1"
+title = "Notch length, maximum, as a fraction of member depth"
+value = 0.3333333333
+units = "x depth"
+source = "IRC 2021 R502.8.1 (one-third of the depth)"
+verified = false
