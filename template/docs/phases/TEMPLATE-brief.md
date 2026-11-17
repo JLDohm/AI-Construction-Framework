@@ -14,7 +14,7 @@
 | Document | Contents | Status |
 |---|---|---|
 | `docs/requirements.md` | R-1 … from the owner's goals, each with its numbers; the Limits index | … |
-| `docs/existing.md` | site and existing building as found; unknowns marked "not checked yet" | … |
+| `docs/existing.md` | site and existing building as found (address from `docs/owner.md` if present, once the owner confirms it is this property); unknowns marked "not checked yet" | … |
 | `jurisdiction/` | adopted codes, design values, amendments, permit rules, from official sources (only if still the blank template) | … |
 | `docs/outline.md` | the one-page building outline | … |
 | `docs/decisions.md` | choices made and still open, with reasons | … |

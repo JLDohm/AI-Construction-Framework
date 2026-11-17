@@ -17,6 +17,7 @@ Write each document from its template: `docs/work/TEMPLATE-work-order.md` or `do
 ## Work orders (for a sub)
 - **Scope** is a list of results, each pointing to the sheet or detail that shows it, so it can be priced and checked.
 - **Not included** is explicit: who patches, cleans up, hauls away, supplies fixtures.
+- **Provisional:** if `docs/inspections.md` is marked provisional, or the design rests on a provisional assumption (P-n), start the document with a warning naming each, and make "confirmed" a hold point before work starts.
 - **Hold points** say what must be inspected before it's covered, and who books the inspection. A trade permit the sub pulls is a hold point before their work starts.
 - **Acceptance** is measurable: inspections passed, trade tests (pressure test, GFCI trip), as-built notes handed over.
 - **The sub must have** the license the jurisdiction requires for this trade, and insurance. The owner checks them; you only list what to check and where (the state's license lookup).

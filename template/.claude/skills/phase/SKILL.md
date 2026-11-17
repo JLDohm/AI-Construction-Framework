@@ -10,7 +10,7 @@ You are the coordinator. You run the agents and keep the owner informed. You do 
 ## 0. Find where we are
 - Read `docs/build-plan.md`, `docs/inspections.md`, and the spec of any phase `in progress`. Run `git status` and `git branch --show-current`.
 - Work out which phases **can start**: every phase in its **Depends on** column (and phase 0) is finished. A brief or design phase is finished when `ready to merge` or `done`; a permit or build phase only when `done`. In a new project, that's only phase 0.
-- Tell the owner, in a few lines: what's in progress, what's `waiting` (and on what: a permit, a sub, an inspection), and which phases can start. Recommend one: usually the one that unblocks the most others, or the one with the longest lead time (permits, long-lead materials).
+- Tell the owner, in a few lines: what's in progress, what's `waiting` (and on what: a permit, a sub, an inspection), any provisional assumptions still standing (`docs/existing.md`, `docs/inspections.md`), and which phases can start. Recommend one: usually the one that unblocks the most others, or the one with the longest lead time (permits, long-lead materials).
 - If the owner asks for a phase whose dependencies aren't finished, say which and why they matter. Go ahead only if the owner insists: record that as a decision, and commit with `ALLOW_PHASE_ORDER=1`.
 - If the owner reports news from outside (a permit issued, plan-review comments, an inspection result, a change made on site), go to **Recording results** or **Field changes** below.
 - Resume from whichever step below is unfinished.
@@ -38,7 +38,8 @@ You are the coordinator. You run the agents and keep the owner informed. You do 
   - changes to the outline or the build plan (including dependencies);
   - new products;
   - every item marked **needs a licensed engineer or architect**;
-  - any design value still "not filled in".
+  - any design value still "not filled in";
+  - every **provisional assumption** (CLAUDE.md rule 7), with a plain warning: "until <the measurement> is taken, these results are provisional and may change".
 
 ## 3. Approval: the owner's call
 - Wait for the owner to say it's approved. Have the spec-writer record the owner's answers under **Answers (owner, date)** and fold them in, or record them in `docs/decisions.md`.
@@ -53,6 +54,7 @@ You are the coordinator. You run the agents and keep the owner informed. You do 
 - Start the **designer** with the spec path. For a large check plan, give it one slice of cases at a time.
 - Check its report: failing checks committed first (`checks(phase-N): …`), then the design that passes them (`design(phase-N): …`), then a clean `.githooks/pre-commit`.
 - Show the owner the changed sheets (`model/out/`), in plain words: what was designed and why.
+- If the check report says **PROVISIONAL**, say so first: which assumptions the results rest on, what will replace each, and that the design may change when it does.
 
 **Permit:** see the Permit phases section below.
 
@@ -72,7 +74,7 @@ Start the reviewers for the phase's type in parallel. Give them only the spec pa
 - Send any FAIL or must-fix findings to the designer or work-planner, then review again.
 - After three rounds without a PASS, stop and ask the owner how to proceed.
 - A round counts only if it sends the design, checks or work back. Check a wording-only fix yourself, without another round.
-- Pass on to the owner every **needs a licensed engineer or architect** item, every **unverified rule** in use, and the reviewers' cost, schedule and site-check notes.
+- Pass on to the owner every **needs a licensed engineer or architect** item, every **unverified rule** in use, every **provisional assumption** a finding rests on, and the reviewers' cost, schedule and site-check notes.
 
 ## 6. Verify
 - Make sure everything is committed (`git status`), then run `.githooks/verify`.
@@ -88,6 +90,7 @@ Start the reviewers for the phase's type in parallel. Give them only the spec pa
   - what was deferred;
   - new decisions and products;
   - the verify result;
+  - if any provisional assumption is left: a warning that the results are provisional until each is replaced, and what replaces each;
   - which phases this unblocks;
   - for permit and build phases: exactly what the owner does next, in order (see those sections below).
 - Give them the merge commands; don't run them:
@@ -129,6 +132,8 @@ The owner approves all of these documents with the spec. Run the spec's **Docume
 Permits issued, plan-review comments, inspection results and field measurements are recorded on a short branch, `phase-N-<name>-record`, and merged by the owner like any phase.
 - **Permit issued:** record the number, date and conditions in the permit spec, and the required inspections in `docs/inspections.md`. Set the permit phase `done`.
 - **Inspection:** record the date, result and inspector's notes in `docs/inspections.md`, and the field measurements. Each failed item or correction notice becomes a follow-up (F-x) in the build plan, fixed before the work is covered.
+- **Measurement replacing a provisional assumption:** record it in `docs/existing.md` and mark the P-n replaced. On the record branch, the designer puts the measured value in the model, removes the `Provisional`, and runs the checks. If they all pass and nothing drawn changes, it's done; otherwise the design phases that used it are amended (as in Field changes, steps 2 and 3) and the owner re-approves.
+- **Inspection list confirmed:** replace the provisional list in `docs/inspections.md` with the department's, and remove its provisional mark. If a hold point or inspection changed, the work-planner updates the work documents.
 - **Build phase done:** when every row of its **Verification** table has passed, set it `done`. Tell the owner which phases this unblocks.
 
 ## Field changes

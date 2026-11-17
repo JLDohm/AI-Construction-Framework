@@ -38,6 +38,13 @@
 ## Connections to existing work
 <Where this phase meets existing structure or earlier phases: ledger attachment, tie-ins, openings cut into existing walls. Name the existing condition each relies on, and how it was found (`docs/existing.md`).>
 
+## Provisional assumptions
+<Site measurements not taken yet that this phase designs to anyway (CLAUDE.md rule 7). Each is the conservative end of what's plausible, and the results resting on it are provisional until it's replaced. Write "none" if there are none.>
+
+| ID | Instead of | Assumed | Why this value | Replaced by |
+|---|---|---|---|---|
+| e.g. P-1 | E-4 rim joist size and condition | 2×10 solid-sawn, sound | smallest rim the ledger table allows | E-4 inspection opening |
+
 ## Limits
 <Measurable numbers this phase must meet: areas, heights, clearances, counts. Each has a check below. Write "none" if there are none.>
 

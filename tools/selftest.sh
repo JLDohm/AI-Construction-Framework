@@ -85,6 +85,13 @@ town=$(dirname "$proj")/selftest-town
 grep -qx 'code=old-code' "$town/packs.conf" || bad "test-town didn't select old-code: $(cat "$town/packs.conf")"
 grep -qx 'prefer=irc-2021' "$town/packs.conf" || bad "test-town didn't prefer irc-2021: $(cat "$town/packs.conf")"
 grep -qx "packs=$packs" "$town/packs.conf" || bad "packs.conf didn't record the pack folder: $(cat "$town/packs.conf")"
+[[ ! -e "$town/docs/owner.md" ]] || bad "an owner profile appeared without one in the pack folder"
+mkdir -p "$packs/owner/docs"
+echo "# Owner: 1 Example Rd, Test Town" >"$packs/owner/docs/owner.md"
+owned=$(dirname "$proj")/selftest-owned
+"$here/new-project.sh" "$owned" --packs "$packs" --jurisdiction test-town >/dev/null
+grep -q "1 Example Rd" "$owned/docs/owner.md" 2>/dev/null || bad "the owner profile wasn't copied from the pack folder"
+[[ ! -e "$proj/docs/owner.md" ]] || bad "a project without pack folders got an owner profile"
 [[ -d "$town/model/rules/old-code" && -d "$town/model/rules/irc-2021" && ! -e "$town/CODE" && ! -e "$town/PREFER" ]] ||
   bad "the test-town project has the wrong files"
 "$here/new-project.sh" "$town" --trades framing >/dev/null || bad "adding a trade without --packs failed (packs.conf should supply the folder)"
@@ -196,7 +203,7 @@ step "project checks"
   if git commit -q --allow-empty -m "should be blocked" 2>/dev/null; then exit 1; fi
 ) || bad "a commit on main was not blocked"
 
-step "model: the irc-2021 pack catches seeded defects, and releases need verified rules"
+step "model: the irc-2021 pack catches seeded defects; releases need verified rules and no provisional assumptions"
 m=$proj/model
 cat >"$m/checks/phase_1.py" <<'PY'
 """Selftest fixture: checks from the irc-2021 pack."""
@@ -291,6 +298,20 @@ else
 fi
 sed -i 's/^verified = false/verified = true/' "$m"/rules/irc-2021/*.toml
 out=$(commit_model "rules verified by the owner") || bad "verified rules didn't commit: $out"
+cp "$m/project.py" "$m/project.py.good"
+sed -i -e 's/OpeningKind, Room, /OpeningKind, Provisional, Room, /' \
+  -e 's/^    return b$/    b.provisional = [Provisional("P-1", "floor 30 in above grade", "E-1 measurement")]\n    return b/' \
+  "$m/project.py"
+out=$(commit_model "a provisional assumption") || bad "a provisional model didn't commit (it should only warn): $out"
+[[ "$out" == *"PROVISIONAL"*"P-1: floor 30 in above grade (until E-1 measurement)"* ]] ||
+  bad "the provisional warning is missing from the commit output: $out"
+if out=$(cd "$proj" && tools/release.sh permit A 2>&1); then
+  bad "a release with a provisional assumption was allowed"
+else
+  [[ "$out" == *"not allowed in a release"*"P-1"* ]] || bad "provisional refusal unclear: $out"
+fi
+mv "$m/project.py.good" "$m/project.py"
+out=$(commit_model "P-1 replaced by the measurement") || bad "removing P-1 didn't commit: $out"
 if out=$(cd "$proj" && tools/release.sh permit A 2>&1); then
   for f in MANIFEST.txt check-report.txt takeoff.csv drawings/A-1.pdf drawings/A-1.dxf; do
     [[ -s "$m/releases/permit-A/$f" ]] || bad "release permit-A has no $f"

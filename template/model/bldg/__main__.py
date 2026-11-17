@@ -88,6 +88,8 @@ def git(*args: str) -> str:
 def cmd_build() -> int:
     b = load_building()
     stamp = f"WORKING COPY: not for permit or construction. {datetime.date.today().isoformat()}"
+    if b.provisional:
+        stamp += f" PROVISIONAL: assumes {', '.join(p.id for p in b.provisional)}"
     files = build(b, OUT, stamp)
     sheets = sum(1 for f in files if f.suffix == ".pdf")
     print(f"✓ built {sheets} sheet(s) and the takeoff in {OUT.relative_to(MODEL.parent)}/")
@@ -143,7 +145,11 @@ def cmd_release(kind: str, rev: str) -> int:
     report = run_checks(b, release=True)
     if not report.ok:
         print(checks.format_report(report))
-        print(f"✗ {name} not released: every check must pass and every rule used must be verified.", file=sys.stderr)
+        print(
+            f"✗ {name} not released: every check must pass, every rule used must be verified, "
+            "and no provisional assumption may be left (docs/existing.md).",
+            file=sys.stderr,
+        )
         return 1
     commit = git("rev-parse", "HEAD")
     today = datetime.date.today().isoformat()

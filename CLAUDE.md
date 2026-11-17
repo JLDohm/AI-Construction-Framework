@@ -23,6 +23,6 @@ This repository is the framework. It is not a construction project built with it
 ## Construction content
 
 - **Never copy code text** (IRC, NEC, IECC or local codes) into the framework: they are copyrighted. Store numbers, units and section IDs, with the source and `verified = false` until the owner checks them.
-- **Never guess a design value** (snow load, frost depth, span). A value of 0 means "not filled in yet". Cite the source and date for every value.
+- **Never guess a design value** (snow load, frost depth, span). A value of 0 means "not filled in yet". Cite the source and date for every value. The only stand-in is a project's stated **provisional assumption** for a site measurement or inspection list not known yet, which marks results provisional and blocks a release.
 - **Stay prescriptive:** anything beyond the IRC's prescriptive rules is a "needs a licensed engineer or architect" item, never a design the framework produces.
 - **Safety first** in anything addressed to the owner: stop conditions, PPE, 811 before digging, de-energize and test before electrical work, lead and asbestos in older homes.

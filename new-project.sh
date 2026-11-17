@@ -175,6 +175,13 @@ copy_tree "$here/template"
 copy_tree "$(find_pack codes "$code")"
 if [[ -n "$prefer" ]]; then copy_tree "$(find_pack codes "$prefer")"; fi
 copy_tree "$jdir"
+# An owner profile (owner/ in a pack folder, laid out like a project): the first one found is copied.
+for r in "${roots[@]}"; do
+  if [[ -d "$r/owner" ]]; then
+    copy_tree "$r/owner"
+    break
+  fi
+done
 for t in "${trade_list[@]}"; do copy_tree "$(find_pack trades "$t")"; done
 
 trades_csv=$(

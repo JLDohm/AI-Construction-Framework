@@ -5,6 +5,7 @@ Trade packs may add elements in their own modules; the project's `Building` hold
 """
 
 import math
+import re
 from collections import Counter
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass, field
@@ -301,6 +302,16 @@ class TakeoffItem:
     source: str  # where the quantity comes from (product data sheet, rule of thumb + reason)
 
 
+@dataclass(frozen=True)
+class Provisional:
+    """A stated assumption standing in for a site measurement not taken yet (docs/existing.md,
+    Provisional assumptions). Every result is provisional while one is left, and a release refuses."""
+
+    id: str  # P-1, P-2, ...
+    what: str  # the value assumed, e.g. "rim joist 2x10 solid-sawn SPF, sound"
+    until: str  # what replaces it, e.g. "E-4 inspection opening"
+
+
 @dataclass(kw_only=True)
 class Building:
     name: str
@@ -317,6 +328,7 @@ class Building:
     holes: list[Hole] = field(default_factory=list)
     alarms: list[Alarm] = field(default_factory=list)
     extras: list[TakeoffItem] = field(default_factory=list)
+    provisional: list[Provisional] = field(default_factory=list)
     # Facts the code's requirements depend on (e.g. CO alarms, R315):
     fuel_burning_appliances: bool = False  # furnace, water heater, fireplace, range... burning fuel
     attached_garage: bool = False
@@ -396,4 +408,13 @@ class Building:
             if a.room and a.room not in rooms:
                 out.append(f"alarm {a.id}: unknown room {a.room!r}")
             out += [f"alarm {a.id}: covers unknown room {r!r}" for r in a.covers if r not in rooms]
+        seen: set[str] = set()
+        for pa in self.provisional:
+            if not re.fullmatch(r"P-\d+", pa.id):
+                out.append(f"provisional {pa.id!r}: id must look like P-1")
+            elif pa.id in seen:
+                out.append(f"provisional {pa.id}: duplicate id")
+            seen.add(pa.id)
+            if not pa.what.strip() or not pa.until.strip():
+                out.append(f"provisional {pa.id}: say what is assumed and what replaces it")
         return out

@@ -23,7 +23,8 @@ The framework goes from the project brief, to plans, to code compliance, to a pe
 | 5 | The `irc-2021` code pack | done |
 | 6 | Jurisdiction packs (`TEMPLATE`, and support for your own packs kept in a separate folder), code packs sharing one set of check helpers, designing to the latest code | done |
 | 7 | Trade packs: foundation, framing, electrical (plumbing, mechanical, envelope later) | done |
-| 8 | Dimension lines, a first plumbing pack, and an example project end to end (a deck with an outdoor receptacle, light and hose bib) | in progress (this branch) |
+| 8 | Dimension lines, a first plumbing pack, and an example project end to end (a deck with an outdoor receptacle, light and hose bib) | in progress |
+| 9 | Provisional assumptions: design goes on before site measurements and the inspection list are known, with results marked provisional and releases refused until they're replaced | in progress (this branch) |
 
 ## Limits
 
@@ -103,6 +104,7 @@ After setting up a project, install the model's tools once: `cd model && python3
   - **build:** work orders for subs and step-by-step instructions for you. The phase is done when its inspections pass.
 - Claude stops and asks you at the approvals (spec, outline changes, new products) and at merging. It never orders, books, pays or submits anything.
 - Tell Claude when something happens outside: "the permit was issued", "the footing inspection passed", "we moved the post 6 inches". It records the result on a short `phase-N-…-record` branch, or handles it as a field change (amend the spec, update the model, stop the work first if it touches structure or safety).
+- Design needn't wait for every site measurement or for the department's inspection list. A spec can adopt a stated, conservative **provisional assumption** instead. Until it's replaced, Claude tells you the results are provisional, the check report and drawings say so, and no permit set is released and no work starts.
 - Design, permits and work overlap, as on a real job. Each phase lists the phases it **depends on**, and the pre-commit hook blocks a `phase-N-…` commit until they're finished: a design phase when it's ready to merge, a permit phase when the permit is issued, a build phase when its inspections pass. A **coordination** design phase before the building permit roughs in every trade's layout (under-slab lines, holes through the structure, chases), so trades can be detailed and permitted later without rework.
 
 ## Packs
@@ -118,6 +120,8 @@ Each pack is a folder laid out like a project. Its files are copied into the pro
 ## Your own packs
 
 Packs for a particular place (your jurisdiction, your state's version of the code) can live in a separate folder, laid out like this repository (`codes/`, `jurisdictions/`, `trades/`), for example a private repository. Point `new-project.sh` at it with `--packs DIR` (repeatable) or `CONST_PACKS=DIR1:DIR2`. Pack folders are searched before the framework, and each project records them in its `packs.conf`, so later runs (adding a trade) find the same packs.
+
+A pack folder can also hold an **owner profile**: `owner/`, laid out like a project (usually just `owner/docs/owner.md` with your name, contact and address). `new-project.sh` copies the first one it finds into each new project, and phase 0 uses it instead of asking again. Keep it in a private folder only.
 
 A state code based on the IRC is a code pack with just rule files and a guide: the check helpers are shared, and its rule files give the same rule ids their values and sections (copy `codes/irc-2021/` and change the values, `code` and `section` fields).
 

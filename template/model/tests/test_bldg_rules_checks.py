@@ -9,7 +9,7 @@ import pytest
 
 from bldg import checks
 from bldg.checks import Result, Rules, check
-from bldg.elements import Building, Level, Stair
+from bldg.elements import Building, Level, Provisional, Stair
 from bldg.geometry import Pt
 from bldg.rules import RuleBook, RuleError, load_rules
 
@@ -151,6 +151,28 @@ def test_unverified_rules_warn_but_block_a_release(tmp_path: Path) -> None:
     assert working.ok
     assert [r.id for r in working.unverified] == ["riser-max"]
     assert not checks.run(stair(7.0, 7.0), rules, [cdef(risers_ok)], release=True).ok
+
+
+def test_provisional_assumptions_warn_but_block_a_release(tmp_path: Path) -> None:
+    b = stair(7.0, 7.0)
+    b.provisional.append(Provisional("P-1", "rim joist 2x10, sound", "E-4 inspection opening"))
+    working = checks.run(b, book(tmp_path), [cdef(risers_ok)])
+    assert working.ok
+    text = checks.format_report(working)
+    assert "PROVISIONAL" in text and "P-1: rim joist 2x10, sound (until E-4" in text
+    assert text.endswith("model problem(s)") and "passed (provisional)" in text
+    release = checks.run(b, book(tmp_path), [cdef(risers_ok)], release=True)
+    assert not release.ok
+    assert "not allowed in a release" in checks.format_report(release)
+
+
+def test_provisional_ids_are_checked(tmp_path: Path) -> None:
+    b = stair(7.0, 7.0)
+    b.provisional += [Provisional("A1", "x", "y"), Provisional("P-2", "x", "y"), Provisional("P-2", "", "y")]
+    problems = "\n".join(b.problems())
+    assert "id must look like P-1" in problems
+    assert "P-2: duplicate id" in problems
+    assert "say what is assumed" in problems
 
 
 def test_model_problems_fail_the_report(tmp_path: Path) -> None:

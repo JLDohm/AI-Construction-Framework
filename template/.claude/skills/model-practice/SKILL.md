@@ -38,7 +38,12 @@ The pre-commit hook runs ruff, mypy (strict), `bldg check` and pytest. Run `.git
   JOIST_SPACING = 16         # in o.c.; IRC Table R507.6 column used
   LEDGER_HEIGHT = ft(2, 6)   # measured 2026-05-02, docs/existing.md
   ```
-- **Never guess a value.** If a design value is 0 or missing in `jurisdiction/` or `docs/existing.md`, stop and report it.
+- **Never guess a value.** If a design value is 0 or missing in `jurisdiction/` or `docs/existing.md`, stop and report it, unless the approved spec lists a **provisional assumption** for it (CLAUDE.md rule 7). Then mark the constant and register it on the building:
+  ```python
+  RIM_DEPTH = 9.25  # PROVISIONAL P-1, docs/existing.md: assumed 2x10 until E-4
+  b.provisional = [Provisional("P-1", "rim joist 2x10 solid-sawn, sound", "E-4 inspection opening")]
+  ```
+  `bldg check` then ends with a PROVISIONAL warning listing each one, working drawings are stamped with them, and `release` refuses until they're gone. When the measurement comes in, replace the value and remove the `Provisional`.
 - Build repetitive members with `spaced_positions(length, spacing)`, so each joist is its own element and every one gets checked.
 - **Stock sizes:** lumber from `LUMBER_SIZES` (nominal names; actual sizes are looked up, so a 2x10 is 9 1/4 in deep). Members over 20 ft are flagged in the takeoff.
 - Ids are short and unique across the whole building (`J1`, `B2`, `F3`, `W12`). `Building.problems()` reports duplicates and broken references, and a problem fails the checks.

@@ -23,7 +23,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Literal
 
-from bldg.elements import Building
+from bldg.elements import Building, Provisional
 from bldg.rules import Rule, RuleBook, RuleError
 
 CHECK_ID = re.compile(r"^T-\d+\.\d+[a-z]?$")
@@ -178,12 +178,13 @@ class Report:
     unverified: list[Rule]  # enforced-code rules used by checks that the owner hasn't verified yet
     release: bool
     unverified_preferred: list[Rule] = field(default_factory=list)  # warned about, never blocking
+    provisional: list[Provisional] = field(default_factory=list)  # results rest on these; block a release
 
     @property
     def ok(self) -> bool:
         if self.problems or any(o.status not in ("pass", "waived") for o in self.outcomes):
             return False
-        return not (self.release and self.unverified)
+        return not (self.release and (self.unverified or self.provisional))
 
 
 def _run_one(building: Building, book: RuleBook, cdef: CheckDef, used: dict[str, Rule], preferred: bool) -> Outcome:
@@ -249,7 +250,7 @@ def run(
             problems.append(f"waiver for {o.check.id} is no longer needed (the check passes): remove it")
     unverified = sorted((r for r in used.values() if not r.verified), key=lambda r: r.id)
     unverified_pref = sorted((r for r in used_preferred.values() if not r.verified), key=lambda r: r.id)
-    return Report(problems, outcomes, unverified, release, unverified_pref)
+    return Report(problems, outcomes, unverified, release, unverified_pref, list(building.provisional))
 
 
 _MARK = {"pass": "✓", "fail": "✗", "error": "✗", "waived": "~"}
@@ -285,9 +286,16 @@ def format_report(report: Report, *, verbose: bool = False) -> str:
     if report.unverified_preferred:
         n = len(report.unverified_preferred)
         lines.append(f"• note: {n} latest-code rule value(s) not verified yet (they don't block a release)")
+    if report.provisional:
+        what = "✗ not allowed in a release" if report.release else "• PROVISIONAL"
+        n = len(report.provisional)
+        lines.append(f"{what}: every result rests on {n} assumption(s) not yet confirmed on site:")
+        lines += [f"    {p.id}: {p.what} (until {p.until})" for p in report.provisional]
     passed = sum(o.status in ("pass", "waived") for o in report.outcomes)
     if not report.outcomes:
         lines.append("• no checks yet (add them in checks/, from the phase spec's check plan)")
     verdict = "✓ all checks passed" if report.ok else "✗ checks failed"
+    if report.ok and report.provisional:
+        verdict += " (provisional)"
     lines.append(f"{verdict}: {passed}/{len(report.outcomes)} checks passed, {len(report.problems)} model problem(s)")
     return "\n".join(lines)
